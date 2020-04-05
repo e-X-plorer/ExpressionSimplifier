@@ -15,6 +15,13 @@ namespace CalculatorSimplifier
 
         private int _brackets;
 
+        /// <summary>
+        /// Create new sequence processor to process given string.
+        /// </summary>
+        /// <param name="sequence">String to process.</param>
+        /// <param name="numberPattern">Pattern used to define numbers and variables.</param>
+        /// <param name="openingBracket">String defining opening bracket.</param>
+        /// <param name="closingBracket">String defining closing bracket.</param>
         public SequenceProcessor(string sequence, string numberPattern = "^[0-9a-zA-Z]+$", string openingBracket = "(",
             string closingBracket = ")")
         {
@@ -76,6 +83,10 @@ namespace CalculatorSimplifier
             return Regex.IsMatch(entry, _numberPattern) ? SequenceType.Number : SequenceType.Illegal;
         }
 
+        /// <summary>
+        /// Read and process next block of characters.
+        /// </summary>
+        /// <returns>String without spaces.</returns>
         public string ReadNextSequence()
         {
             while (CurrentIndex < Sequence.Length && Sequence[CurrentIndex] == ' ')
@@ -116,6 +127,7 @@ namespace CalculatorSimplifier
             _brackets = 0;
         }
 
+        /// <returns>Sequence types considered illegal for next sequence</returns>
         private static IEnumerable<SequenceType> GetNextIllegalSequences(SequenceType currentSequenceType)
         {
             return currentSequenceType switch

@@ -5,8 +5,14 @@ namespace CalculatorSimplifier
 {
     public class Number : IExpression
     {
+        /// <summary>
+        /// Numeric value if exists.
+        /// </summary>
         private readonly double _number;
 
+        /// <summary>
+        /// Name if this is a variable.
+        /// </summary>
         private readonly string _name;
 
         public Number(string name)

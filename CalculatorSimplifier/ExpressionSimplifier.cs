@@ -6,6 +6,13 @@ namespace CalculatorSimplifier
 {
     public static class ExpressionSimplifier
     {
+        /// <summary>
+        /// Try simplifying mathematical expression.
+        /// </summary>
+        /// <param name="sequenceProcessor">Object to process string step-by-step.</param>
+        /// <param name="applyDivision">apply division and treat it as any other operation or not.</param>
+        /// <param name="applyRounding">return values in rounded, shortened form if needed</param>
+        /// <returns></returns>
         public static string Simplify(SequenceProcessor sequenceProcessor, bool applyDivision, bool applyRounding)
         {
             if (sequenceProcessor == null) throw new ArgumentNullException(nameof(sequenceProcessor));

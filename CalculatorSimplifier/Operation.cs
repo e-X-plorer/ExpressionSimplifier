@@ -2,6 +2,9 @@
 
 namespace CalculatorSimplifier
 {
+    /// <summary>
+    /// Base class for supported arithmetic operations.
+    /// </summary>
     public abstract class Operation : IEquatable<Operation>
     {
         public abstract int Priority { get; }

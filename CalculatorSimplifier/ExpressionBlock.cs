@@ -11,6 +11,9 @@ namespace CalculatorSimplifier
 
         private readonly List<IExpression> _nodes = new List<IExpression>();
 
+        /// <summary>
+        /// A value which never changes an operation's result on the same priority level.
+        /// </summary>
         private readonly double _defaultValue;
 
         private readonly Operation _defaultOperation;

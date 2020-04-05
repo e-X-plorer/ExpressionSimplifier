@@ -5,8 +5,14 @@ namespace CalculatorSimplifier
 {
     public static class Settings
     {
+        /// <summary>
+        /// Maximum digits to leave after decimal point.
+        /// </summary>
         public const int PrecisionDigits = 5;
 
+        /// <summary>
+        /// Maximum allowed priority for expression block.
+        /// </summary>
         public const int MaximumPriority = 100;
 
         private static readonly (string, Operation)[] KeyOperationPairs =
@@ -17,6 +23,9 @@ namespace CalculatorSimplifier
             ("/", new Division())
         };
 
+        /// <summary>
+        /// Priority of parentheses is always higher than priority of any operation.
+        /// </summary>
         public static int ParenthesesPriority { get; } =
             KeyOperationPairs.Select(pair => pair.Item2.Priority).Max() + 1;
 
