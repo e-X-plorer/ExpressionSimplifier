@@ -56,6 +56,7 @@ namespace CalculatorSimplifier.Tests
         [InlineData("2 (3 + 4)")]
         [InlineData("2 * (3 + 4) 3")]
         [InlineData("(1 + 1) (2 - 2)")]
+        [InlineData("((1 + 1 + 1)")]
         public void Simplify_InvalidInput_Exception(string input)
         {
             Assert.Equal("<Error>", ExpressionSimplifier.Simplify(new SequenceProcessor(input), true, true));

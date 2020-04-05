@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using Xunit;
 
 namespace CalculatorSimplifier.Tests
@@ -35,6 +36,7 @@ namespace CalculatorSimplifier.Tests
 
             Assert.Equal("123abc", sequenceProcessor.Sequence);
             Assert.Equal(0, sequenceProcessor.CurrentIndex);
+            Assert.True(sequenceProcessor.BracketsValid);
         }
 
         [Theory]
@@ -74,6 +76,19 @@ namespace CalculatorSimplifier.Tests
         public void ReadNextSequence_InvalidInput_Exception(string input)
         {
             Assert.Throws<ArgumentException>(() => ReadFullExpression(new SequenceProcessor(input)));
+        }
+
+        [Fact]
+        public void Reset_CallReset_StateReset()
+        {
+            var sequenceProcessor = new SequenceProcessor("(123456");
+            sequenceProcessor.ReadNextSequence();
+            sequenceProcessor.ReadNextSequence();
+
+            sequenceProcessor.Reset();
+
+            Assert.True(sequenceProcessor.BracketsValid);
+            Assert.Equal(0, sequenceProcessor.CurrentIndex);
         }
 
         private void ReadFullExpression(SequenceProcessor sequenceProcessor)

@@ -13,6 +13,8 @@ namespace CalculatorSimplifier
 
         private readonly string _closingBracketSequence;
 
+        private int _brackets;
+
         public SequenceProcessor(string sequence, string numberPattern = "^[0-9a-zA-Z]+$", string openingBracket = "(",
             string closingBracket = ")")
         {
@@ -32,6 +34,7 @@ namespace CalculatorSimplifier
             _openingBracketSequence = openingBracket;
             _closingBracketSequence = closingBracket;
             CurrentIndex = 0;
+            _brackets = 0;
             Sequence = GetPreparedInput(sequence);
         }
 
@@ -47,6 +50,8 @@ namespace CalculatorSimplifier
         public string Sequence { get; }
 
         public int CurrentIndex { get; private set; }
+
+        public bool BracketsValid => _brackets == 0;
 
         public IEnumerable<SequenceType> IllegalSequences { get; private set; } = new List<SequenceType>
         {SequenceType.ClosingBracket, SequenceType.Operation, SequenceType.Illegal};
@@ -91,12 +96,25 @@ namespace CalculatorSimplifier
                 throw new ArgumentException("Incorrect expression format.");
             }
 
+            if (currentSequenceType == SequenceType.OpeningBracket)
+            {
+                _brackets++;
+            }
+            else if (currentSequenceType == SequenceType.ClosingBracket)
+            {
+                _brackets--;
+            }
+
             IllegalSequences = GetNextIllegalSequences(currentSequenceType).ToList();
 
             return currentSequence;
         }
 
-        public void Reset() => CurrentIndex = 0;
+        public void Reset()
+        {
+            CurrentIndex = 0;
+            _brackets = 0;
+        }
 
         private static IEnumerable<SequenceType> GetNextIllegalSequences(SequenceType currentSequenceType)
         {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace CalculatorSimplifier
@@ -24,11 +23,15 @@ namespace CalculatorSimplifier
             try
             {
                 result = ParseExpression(sequenceProcessor);
-                sequenceProcessor.Reset();
+                if (!sequenceProcessor.BracketsValid)
+                {
+                    throw new ArgumentException("Incorrect expression format.");
+                }
             }
             catch (ArgumentException e)
             {
                 Console.WriteLine(e.Message + "\nCould not simplify an expression");
+                sequenceProcessor.Reset();
                 return "<Error>";
             }
 
@@ -136,6 +139,7 @@ namespace CalculatorSimplifier
                     currentExpressionBlock.AppendNode(currentNumber);
                 }
             }
+
             return isFinalSequence;
         }
     }
