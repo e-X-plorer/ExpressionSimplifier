@@ -24,6 +24,15 @@ namespace CalculatorSimplifier.Tests
                 new ExpressionBlock(0, new List<IExpression>(nodesCount), new List<Operation>(operationsCount)));
         }
 
+        [Fact]
+        public void Init_CollectionsNull_Exception()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new ExpressionBlock(0, new[] {new Number(1), new Number(1)}, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                new ExpressionBlock(0, null, new[] {new Addition()}));
+        }
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]

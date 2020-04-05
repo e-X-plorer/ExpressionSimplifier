@@ -12,7 +12,7 @@ namespace CalculatorSimplifier
         public Number(string name)
         {
             IsVariable = true;
-            this._name = name;
+            _name = name;
         }
 
         public Number(double value)
@@ -39,10 +39,5 @@ namespace CalculatorSimplifier
         public double GetNumericValue(bool applyDivision) => IsVariable ? double.NaN : _number;
 
         public void MergeChildren() {}
-
-        public override string ToString()
-        {
-            return IsVariable ? _name : _number.ToString();
-        }
     }
 }

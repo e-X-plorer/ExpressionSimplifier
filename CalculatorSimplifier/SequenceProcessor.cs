@@ -28,7 +28,7 @@ namespace CalculatorSimplifier
                     "Number pattern is ambiguous as it matches other special character sequences.", nameof(numberPattern));
             }
 
-            this._numberPattern = numberPattern;
+            _numberPattern = numberPattern;
             _openingBracketSequence = openingBracket;
             _closingBracketSequence = closingBracket;
             CurrentIndex = 0;
@@ -71,26 +71,6 @@ namespace CalculatorSimplifier
             return Regex.IsMatch(entry, _numberPattern) ? SequenceType.Number : SequenceType.Illegal;
         }
 
-        private static IEnumerable<SequenceType> GetNextIllegalSequences(SequenceType currentSequenceType)
-        {
-            return currentSequenceType switch
-            {
-                SequenceType.Operation => new[]
-                    {SequenceType.ClosingBracket, SequenceType.Operation, SequenceType.Illegal},
-                SequenceType.Number => new[]
-                    {SequenceType.OpeningBracket, SequenceType.Number, SequenceType.Illegal},
-                SequenceType.OpeningBracket => new[]
-                    {SequenceType.ClosingBracket, SequenceType.Operation, SequenceType.Illegal},
-                SequenceType.ClosingBracket => new[]
-                    {SequenceType.OpeningBracket, SequenceType.Number, SequenceType.Illegal},
-                _ => new[] {SequenceType.Illegal}
-            };
-        }
-
-        private string GetPreparedInput(string input) =>
-            Settings.Keys.Concat(new[] {_openingBracketSequence, _closingBracketSequence})
-                .Aggregate(input, (current, s) => current.Replace(s, $" {s} ")).Trim();
-
         public string ReadNextSequence()
         {
             while (CurrentIndex < Sequence.Length && Sequence[CurrentIndex] == ' ')
@@ -117,5 +97,25 @@ namespace CalculatorSimplifier
         }
 
         public void Reset() => CurrentIndex = 0;
+
+        private static IEnumerable<SequenceType> GetNextIllegalSequences(SequenceType currentSequenceType)
+        {
+            return currentSequenceType switch
+            {
+                SequenceType.Operation => new[]
+                    {SequenceType.ClosingBracket, SequenceType.Operation, SequenceType.Illegal},
+                SequenceType.Number => new[]
+                    {SequenceType.OpeningBracket, SequenceType.Number, SequenceType.Illegal},
+                SequenceType.OpeningBracket => new[]
+                    {SequenceType.ClosingBracket, SequenceType.Operation, SequenceType.Illegal},
+                SequenceType.ClosingBracket => new[]
+                    {SequenceType.OpeningBracket, SequenceType.Number, SequenceType.Illegal},
+                _ => new[] { SequenceType.Illegal }
+            };
+        }
+
+        private string GetPreparedInput(string input) =>
+            Settings.Keys.Concat(new[] { _openingBracketSequence, _closingBracketSequence })
+                .Aggregate(input, (current, s) => current.Replace(s, $" {s} ")).Trim();
     }
 }

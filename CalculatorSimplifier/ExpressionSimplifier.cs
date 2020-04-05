@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace CalculatorSimplifier
@@ -8,15 +9,29 @@ namespace CalculatorSimplifier
     {
         public static string Simplify(SequenceProcessor sequenceProcessor, bool applyDivision, bool applyRounding)
         {
+            if (sequenceProcessor == null) throw new ArgumentNullException(nameof(sequenceProcessor));
+
             if (sequenceProcessor.Sequence.Length == 0)
             {
-                throw new ArgumentException("Empty string is not an expression.");
+                Console.WriteLine("Empty string is not an expression.");
+                return "<Error>";
             }
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
             sequenceProcessor.Reset();
-            IExpression result = ParseExpression(sequenceProcessor);
+            IExpression result;
+            try
+            {
+                result = ParseExpression(sequenceProcessor);
+                sequenceProcessor.Reset();
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message + "\nCould not simplify an expression");
+                return "<Error>";
+            }
+
             sequenceProcessor.Reset();
             result.MergeChildren();
             return result.SimplifiedRepresentation(applyDivision, applyRounding);

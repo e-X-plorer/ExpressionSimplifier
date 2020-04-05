@@ -43,12 +43,15 @@ namespace CalculatorSimplifier
         public ExpressionBlock(int priority, IEnumerable<IExpression> nodes, IEnumerable<Operation> operations) :
             this(priority)
         {
+            if (nodes == null) throw new ArgumentNullException(nameof(nodes));
+            if (operations == null) throw new ArgumentNullException(nameof(operations));
+
             if (nodes.Count() != operations.Count() + 1)
             {
                 throw new ArgumentException("");
             }
-            this._nodes.AddRange(nodes);
-            this._operations.AddRange(operations);
+            _nodes.AddRange(nodes);
+            _operations.AddRange(operations);
         }
 
         public bool IsAtomic => false;
@@ -130,10 +133,10 @@ namespace CalculatorSimplifier
 
         public double GetNumericValue(bool applyDivision)
         {
-            double result = _defaultValue;
-            bool hasValue = false;
+            var result = _defaultValue;
+            var hasValue = false;
 
-            for (int i = 0; i < _operations.Count; i++)
+            for (var i = 0; i < _operations.Count; i++)
             {
                 if (_nodes[i].IsVariable ||
                     !applyDivision && (_nodes[i].ContainsDivision || _operations[i].GetType() == typeof(Division)) ||
@@ -212,17 +215,6 @@ namespace CalculatorSimplifier
                 ContainsDivision = true;
             }
             _operations.Add(operation);
-        }
-
-        public override string ToString()
-        {
-            var result = "(";
-            for (var i = 0; i < _nodes.Count; i++)
-            {
-                result += Settings.GetKeyFromOperation(_operations[i]) + ' ' + _nodes[i] + ' ';
-            }
-
-            return result + ")";
         }
     }
 }

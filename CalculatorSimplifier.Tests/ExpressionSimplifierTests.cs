@@ -58,8 +58,13 @@ namespace CalculatorSimplifier.Tests
         [InlineData("(1 + 1) (2 - 2)")]
         public void Simplify_InvalidInput_Exception(string input)
         {
-            Assert.Throws<ArgumentException>(() =>
-                ExpressionSimplifier.Simplify(new SequenceProcessor(input), true, true));
+            Assert.Equal("<Error>", ExpressionSimplifier.Simplify(new SequenceProcessor(input), true, true));
+        }
+
+        [Fact]
+        public void Simplify_SequenceProcessorNull_Exception()
+        {
+            Assert.Throws<ArgumentNullException>(() => ExpressionSimplifier.Simplify(null, true, true));
         }
     }
 }
